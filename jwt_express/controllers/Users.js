@@ -7,6 +7,7 @@ export const getUsers = async(req, res) => {
         const users = await Users.findAll({
             attributes:['id','name','email']
         });
+        console.log(req.cookies.refreshToken)
         res.json(users);
     } catch (error) {
         console.log(error);
@@ -80,4 +81,9 @@ export const Logout = async(req, res) => {
     });
     res.clearCookie('refreshToken');
     return res.sendStatus(200);
+}
+export const Welcome = (req,res) =>{
+    res.json({
+        message : 'Hello brother, login dlu skuy!.'
+    })
 }
