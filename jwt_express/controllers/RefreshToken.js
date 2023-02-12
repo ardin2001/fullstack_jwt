@@ -1,6 +1,7 @@
 import Users from "../models/UserModel.js";
 import jwt from "jsonwebtoken";
- 
+import { verifyToken } from "../middleware/VerifyToken.js";
+
 export const refreshToken = async(req, res) => {
     try {
         const refreshToken = req.cookies.refreshToken;
@@ -22,6 +23,7 @@ export const refreshToken = async(req, res) => {
             res.json({ accessToken });
         });
     } catch (error) {
+        console.log('masuk error')
         console.log(error);
     }
 }

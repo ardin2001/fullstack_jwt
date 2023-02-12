@@ -1,19 +1,7 @@
 import Users from "../models/UserModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
- 
-export const getUsers = async(req, res) => {
-    try {
-        const users = await Users.findAll({
-            attributes:['id','name','email']
-        });
-        console.log(req.cookies.refreshToken)
-        res.json(users);
-    } catch (error) {
-        console.log(error);
-    }
-}
- 
+
 export const Register = async(req, res) => {
     const { name, email, password, confPassword } = req.body;
     if(password !== confPassword) return res.status(400).json({msg: "Password dan Confirm Password tidak cocok"});
@@ -38,6 +26,7 @@ export const Login = async(req, res) => {
                 email: req.body.email
             }
         });
+        console.log('ini email',user)
         const match = await bcrypt.compare(req.body.password, user[0].password);
         if(!match) return res.status(400).json({msg: "Wrong Password"});
         const userId = user[0].id;
@@ -58,7 +47,7 @@ export const Login = async(req, res) => {
             httpOnly: true,
             maxAge: 24 * 60 * 60 * 1000
         });
-        res.json({ accessToken });
+        res.json({ accessToken,userId, name, email, message : 'ini data user habis login ges' });
     } catch (error) {
         res.status(404).json({msg:"Email tidak ditemukan"});
     }
